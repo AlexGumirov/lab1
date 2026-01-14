@@ -13,7 +13,7 @@ class Cash:
         print(f"Оплата наличными при получении: {amount:.2f}P")
         return True
 
-# Для тестирования сценария ошибки оплаты — отдельный класс
+# Для тестирования сценария ошибки оплаты
 class DeclinedPayment:
     def pay(self, amount):
         print(f"Платёж отклонён для суммы: {amount:.2f}P")
