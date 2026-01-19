@@ -1,12 +1,12 @@
 from models.cart import Cart
-from strategies.discount import NoDiscount
+from strategies.discount import Discount, NoDiscount
 from strategies.delivery import Pickup
 from strategies.payment import Cash
 
 class CheckoutFacade:
     def __init__(self, cart: Cart):
         self.cart = cart
-        self.discount = NoDiscount()
+        self.discount: Discount = NoDiscount()
         self.delivery = Pickup()
         self.payment = Cash()
 
