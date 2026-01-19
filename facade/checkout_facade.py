@@ -1,40 +1,31 @@
 from models.cart import Cart
 from strategies.discount import Discount, NoDiscount
-from strategies.delivery import Pickup
-from strategies.payment import Cash
+from strategies.delivery import Delivery, Pickup
+from strategies.payment import Payment, Cash
 
 class CheckoutFacade:
     def __init__(self, cart: Cart):
         self.cart = cart
         self.discount: Discount = NoDiscount()
-        self.delivery = Pickup()
-        self.payment = Cash()
+        self.delivery: Delivery = Pickup()
+        self.payment: Payment = Cash()
 
-    def set_discount(self, discount):
+    def set_discount(self, discount: Discount):
         self.discount = discount
 
-    def set_delivery(self, delivery):
+    def set_delivery(self, delivery: Delivery):
         self.delivery = delivery
 
-    def set_payment(self, payment):
+    def set_payment(self, payment: Payment):
         self.payment = payment
 
     def make_order(self, customer_name):
-        print("\n оформление заказа")
-        self.cart.show()
-
         subtotal = self.cart.subtotal()
         after_discount = self.discount.apply(subtotal)
         delivery_cost = self.delivery.cost(after_discount)
         total = after_discount + delivery_cost
 
-        print(f"Скидка: {subtotal - after_discount:.2f}P")
-        print(f"Доставка ({self.delivery.name()}): {delivery_cost:.2f}P")
-        print(f"ИТОГО К ОПЛАТЕ: {total:.2f}P")
-
-        paid = self.payment.pay(total)
-        if paid:
-            print(f"Заказ оформлен на {customer_name}!\n")
+        print("ИТОГО:", total)
+        if self.payment.pay(total):
+            print("Заказ оформлен для", customer_name)
             self.cart.clear()
-        else:
-            print("Ошибка оплаты")

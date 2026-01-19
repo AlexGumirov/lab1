@@ -1,20 +1,30 @@
-class PayByCard:
+from abc import ABC, abstractmethod
+
+class Payment(ABC):
+    @abstractmethod
     def pay(self, amount):
-        print(f"Оплачено картой: {amount:.2f}P")
+        pass
+
+
+class PayByCard(Payment):
+    def pay(self, amount):
+        print(f"Оплата картой: {amount}P")
         return True
 
-class PayPal:
+
+class PayPal(Payment):
     def pay(self, amount):
-        print(f"Оплачено через SberPay: {amount:.2f}P")
+        print(f"Оплата PayPal: {amount}P")
         return True
 
-class Cash:
+
+class Cash(Payment):
     def pay(self, amount):
-        print(f"Оплата наличными при получении: {amount:.2f}P")
+        print(f"Оплата наличными: {amount}P")
         return True
 
-# Для тестирования сценария ошибки оплаты
-class DeclinedPayment:
+
+class DeclinedPayment(Payment):
     def pay(self, amount):
-        print(f"Платёж отклонён для суммы: {amount:.2f}P")
+        print("Платёж отклонён")
         return False
